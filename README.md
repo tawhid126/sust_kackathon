@@ -12,9 +12,9 @@ An intelligent support ticket analysis API that classifies, routes, and explains
 | Layer | Technology | Purpose |
 |---|---|---|
 | **Framework** | FastAPI (Python 3.11) | Async API framework with auto-validation |
-| **LLM** | DeepSeek V3 (`deepseek-chat`) | Ticket analysis & evidence reasoning |
+| **LLM** | Gemini 2.5 Flash | Ticket analysis & evidence reasoning |
 | **Validation** | Pydantic v2 | Request/response schema enforcement |
-| **HTTP Client** | httpx | Async LLM API calls |
+| **HTTP Client** | google-genai | Async LLM API calls |
 | **Deployment** | Render / Docker | Free-tier cloud hosting |
 
 ---
@@ -35,7 +35,7 @@ pip install -r requirements.txt
 
 ```bash
 cp .env.example .env
-# Edit .env and add your DeepSeek API key
+# Edit .env and add your Gemini API key (Google AI Studio)
 ```
 
 ### 3. Run the Service
@@ -78,7 +78,7 @@ curl -X POST http://localhost:8000/analyze-ticket \
 docker build -t queuestorm-investigator .
 
 # Run
-docker run -p 8000:8000 -e DEEPSEEK_API_KEY=your_key_here queuestorm-investigator
+docker run -p 8000:8000 -e GEMINI_API_KEY=your_key_here queuestorm-investigator
 ```
 
 ---
@@ -136,14 +136,14 @@ The system doesn't just classify complaints — it **investigates** them:
 6. **Draft** a safe, professional customer reply
 
 ### Model Selection
-- **DeepSeek V3 (`deepseek-chat`)**: Chosen for its strong reasoning capabilities at a very low cost. Uses structured JSON output mode for reliable schema compliance. Temperature set to 0.1 for consistent, deterministic outputs.
+- **Gemini 2.5 Flash**: Chosen for its incredibly fast inference, strong reasoning capabilities, and large context window. Uses structured JSON output mode for reliable schema compliance. Temperature set to 0.1 for consistent, deterministic outputs.
 
-### Why DeepSeek V3?
-- Excellent instruction following for structured JSON output
-- Strong multilingual support (English, Bangla, Banglish)
-- Cost-effective for hackathon budget
-- OpenAI-compatible API for easy integration
-- Fast inference within the 30-second timeout
+### Why Gemini Flash?
+- Native structured output (JSON) support via Google GenAI SDK
+- Lightning fast response times
+- Generous free tier via Google AI Studio
+- Excellent instruction following and reasoning for complex scenarios
+- Multilingual support (English, Bangla, Banglish)
 
 ---
 
@@ -175,15 +175,15 @@ The system doesn't just classify complaints — it **investigates** them:
 
 | Model | Provider | Where it runs | Why chosen |
 |---|---|---|---|
-| `deepseek-chat` (DeepSeek V3) | DeepSeek | DeepSeek Cloud API | Cost-effective, strong reasoning, fast inference, structured JSON output, multilingual support |
+| `gemini-2.5-flash` | Google (AI Studio) | Google Cloud API | Fast inference, structured JSON output, generous free tier, strong reasoning |
 
-**No GPU required.** The service makes API calls to DeepSeek's cloud endpoint. A 2 vCPU / 4 GB RAM machine is sufficient.
+**No GPU required.** The service makes API calls to Google's GenAI endpoints. A 2 vCPU / 4 GB RAM machine is sufficient.
 
 ---
 
 ## ⚠️ Known Limitations
 
-1. **LLM Dependency**: Service quality depends on DeepSeek API availability and response quality
+1. **LLM Dependency**: Service quality depends on Google Gemini API availability and response quality
 2. **No Real Data Integration**: All transaction data is synthetic; no real payment system integration
 3. **Single-Ticket Processing**: Handles one ticket at a time (no batch processing)
 4. **Language Coverage**: Primarily optimized for English and common Bangla/Banglish phrases
