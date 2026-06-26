@@ -6,8 +6,8 @@ Step-by-step guide to bring up the service locally. A stranger should be able to
 
 ## Prerequisites
 
-- Python 3.11+ installed
-- A DeepSeek API key (get one at https://platform.deepseek.com)
+- Python 3.11+
+- A Google Gemini API key (get one at https://aistudio.google.com/app/apikey)
 - `pip` and `venv` available
 
 ---
@@ -28,8 +28,8 @@ pip install -r requirements.txt
 
 # 4. Set up environment variables
 cp .env.example .env
-# Edit .env and replace 'your_deepseek_api_key_here' with your actual API key:
-#   DEEPSEEK_API_KEY=sk-your-actual-key-here
+# Edit .env and replace with your actual Gemini API key (from Google AI Studio):
+#   GEMINI_API_KEY=your_actual_key_here
 
 # 5. Start the service
 uvicorn app.main:app --host 0.0.0.0 --port 8000
@@ -66,7 +66,7 @@ curl -X POST http://localhost:8000/analyze-ticket \
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/YOUR_USERNAME/queuestorm-investigator.git
+git clone https://github.com/tawhid126/sust_hackathon.git
 cd queuestorm-investigator
 
 # 2. Build the Docker image
@@ -74,7 +74,7 @@ docker build -t queuestorm-investigator .
 
 # 3. Run the container
 docker run -p 8000:8000 \
-  -e DEEPSEEK_API_KEY=sk-your-actual-key-here \
+  -e GEMINI_API_KEY=your_actual_key_here \
   queuestorm-investigator
 
 # 4. Verify health
@@ -98,9 +98,8 @@ python -m pytest tests/ -v
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `DEEPSEEK_API_KEY` | Yes | — | Your DeepSeek API key |
-| `DEEPSEEK_BASE_URL` | No | `https://api.deepseek.com` | DeepSeek API base URL |
-| `DEEPSEEK_MODEL` | No | `deepseek-chat` | Model name to use |
+| `GEMINI_API_KEY` | Yes | — | Your Google AI Studio API key |
+| `GEMINI_MODEL` | No | `gemini-2.5-flash` | Model name to use |
 | `HOST` | No | `0.0.0.0` | Server bind host |
 | `PORT` | No | `8000` | Server bind port |
 | `LLM_TIMEOUT` | No | `25` | LLM request timeout (seconds) |
@@ -112,6 +111,6 @@ python -m pytest tests/ -v
 | Issue | Fix |
 |---|---|
 | `ModuleNotFoundError` | Run `pip install -r requirements.txt` in your venv |
-| `DEEPSEEK_API_KEY not set` | Create `.env` from `.env.example` and add your key |
-| Timeout on `/analyze-ticket` | Check your internet connection and DeepSeek API status |
+| `GEMINI_API_KEY not set` | Create `.env` from `.env.example` and add your key |
+| Timeout on `/analyze-ticket` | Check your internet connection and Google GenAI API status |
 | `Connection refused` on test | Make sure the service is running before running tests |
